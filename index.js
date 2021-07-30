@@ -1,6 +1,6 @@
 const express = require('express')
 const conectarDB = require('./config/db')
-const cors = require('cors')
+// const cors = require('cors')
 
 // Crear el servidor
 const app = express()
@@ -9,13 +9,21 @@ const app = express()
 conectarDB()
 
 // Habilitar cors
-app.use(cors())
+// app.use(cors())
+
+// Habilitar cors
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "domain"); // update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
+    next()
+})
 
 // Habilitar express.json
 app.use(express.json({ extended: true }))
 
 // Puerto de la app
-const port = process.env.port || 4000
+const port = process.env.PORT || 4000
 
 // Importar rutas
 app.use('/api/usuarios', require('./routes/usuarios'))
