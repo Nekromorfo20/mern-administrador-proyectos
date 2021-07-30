@@ -1,6 +1,6 @@
 const express = require('express')
 const conectarDB = require('./config/db')
-// const cors = require('cors')
+const cors = require('cors')
 
 // Crear el servidor
 const app = express()
@@ -9,15 +9,8 @@ const app = express()
 conectarDB()
 
 // Habilitar cors
-// app.use(cors())
-
-// Habilitar cors
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "domain"); // update to match the domain you will make the request from
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS');
-    next()
-})
+app.use(cors({ credentials: true, origin: true }))
+app.options("*", cors())
 
 // Habilitar express.json
 app.use(express.json({ extended: true }))
@@ -32,6 +25,6 @@ app.use('/api/proyectos', require('./routes/proyectos'))
 app.use('/api/tareas', require('./routes/tareas'))
 
 // Arrancar la app
-app.listen(port, '0.0.0.0', () => {
+app.listen(port, () => {
     console.log(`El servidor esta funcionando en el puerto ${port}`)
 })
